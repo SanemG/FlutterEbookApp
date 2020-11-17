@@ -1,74 +1,74 @@
 name: CI/CD Mobile and Web
-
-on:
+'on':
   push:
-    branches: [ develop ]
+    branches:
+      - develop
   pull_request:
-    branches: [ master ]
-
+    branches:
+      - master
 jobs:
   build:
-   ios-driven:
-    name: Build ios
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
-      with:
-        java-version: '12.x'
-    - uses: subosito/flutter-action@v1
-      with:
-        flutter-version: '1.0.2+4'
-    - run: flutter pub get
-    - run: flutter test
-    - run: flutter build apk --debug --split-per-abi
-    - run: flutter build ios --no-codesign
-    - name: Create a Release APK
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: "build/app/outputs/apk/debug/*.apk"
-        token: ${{ secrets.GİTHUB_TOKEN }}
-    - uses: actions/upload-artifact@v1
-      with:
-        name: web-build
-        path: build/web
-   android-driven:
-    name: Build android
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
-      with:
-        java-version: '12.x'
-    - uses: subosito/flutter-action@v1
-      with:
-        flutter-version: '1.0.2+4'
-    - run: flutter pub get
-    - run: flutter test
-    - run: flutter build apk --debug --split-per-abi
-    - run: flutter build appbundle
-    - name: Create a Release APK
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: "build/app/outputs/apk/debug/*.apk"
-        token: ${{ secrets.GİTHUB_TOKEN }}
-    - uses: actions/upload-artifact@v1
-      with:
-        name: web-build
-        path: build/web
-   web-driven:
-    name: Build web
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
-      with:
-        java-version: '12.x'
-    - uses: subosito/flutter-action@v1
-      with:
-        channel: beta
-    - run: flutter config --enable-web
-    - run: flutter pub get
-    - run: flutter test
-    - run: flutter build web
-    - uses: sanemg/flutter-gh-pages@v2
+    ios-driven:
+      name: Build ios
+      runs-on: macos-latest
+      steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-java@v1
+          with:
+            java-version: 12.x
+        - uses: subosito/flutter-action@v1
+          with:
+            flutter-version: 1.0.2+4
+        - run: flutter pub get
+        - run: flutter test
+        - run: flutter build apk --debug --split-per-abi
+        - run: flutter build ios --no-codesign
+        - name: Create a Release APK
+          uses: ncipollo/release-action@v1
+          with:
+            artifacts: build/app/outputs/apk/debug/*.apk
+            token: '${{ secrets.GİTHUB_TOKEN }}'
+        - uses: actions/upload-artifact@v1
+          with:
+            name: web-build
+            path: build/web
+    android-driven:
+      name: Build android
+      runs-on: macos-latest
+      steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-java@v1
+          with:
+            java-version: 12.x
+        - uses: subosito/flutter-action@v1
+          with:
+            flutter-version: 1.0.2+4
+        - run: flutter pub get
+        - run: flutter test
+        - run: flutter build apk --debug --split-per-abi
+        - run: flutter build appbundle
+        - name: Create a Release APK
+          uses: ncipollo/release-action@v1
+          with:
+            artifacts: build/app/outputs/apk/debug/*.apk
+            token: '${{ secrets.GİTHUB_TOKEN }}'
+        - uses: actions/upload-artifact@v1
+          with:
+            name: web-build
+            path: build/web
+    web-driven:
+      name: Build web
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-java@v1
+          with:
+            java-version: 12.x
+        - uses: subosito/flutter-action@v1
+          with:
+            channel: beta
+        - run: flutter config --enable-web
+        - run: flutter pub get
+        - run: flutter test
+        - run: flutter build web
+        - uses: sanemg/flutter-gh-pages@v2
